@@ -1,4 +1,4 @@
-// var newrelic = require('newrelic');
+var newrelic = require('newrelic');
 const express = require("express");
 const cors = require("cors");
 
@@ -17,10 +17,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 //set custom headers
-// app.use(function(req, res, next) {
-//   res.setHeader("Access-Control-Allow-Headers", ["newrelic","traceparent","tracestate"]);
-//   return next();
-// });
+app.use(function(req, res, next) {
+  res.setHeader("Access-Control-Allow-Headers", ["newrelic","traceparent","tracestate"]);
+  return next();
+});
 
 const db = require("./app/models");
 db.mongoose
