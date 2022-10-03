@@ -1,10 +1,11 @@
+// var newrelic = require('newrelic');
 const express = require("express");
 const cors = require("cors");
 
 const app = express();
 
 var corsOptions = {
-  origin: "http://localhost:8081"
+  origin: ["http://localhost:8081"]
 };
 
 app.use(cors(corsOptions));
@@ -14,6 +15,12 @@ app.use(express.json());
 
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
+
+//set custom headers
+// app.use(function(req, res, next) {
+//   res.setHeader("Access-Control-Allow-Headers", ["newrelic","traceparent","tracestate"]);
+//   return next();
+// });
 
 const db = require("./app/models");
 db.mongoose
@@ -31,7 +38,7 @@ db.mongoose
 
 // simple route
 app.get("/", (req, res) => {
-  res.json({ message: "Welcome to bezkoder application." });
+  res.json({ message: "Welcome to tutorial application." });
 });
 
 require("./app/routes/turorial.routes")(app);
