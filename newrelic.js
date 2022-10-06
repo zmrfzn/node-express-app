@@ -39,6 +39,11 @@ exports.config = {
   distributed_tracing: {
     enabled: true
   },
+  infinite_tracing: {
+    trace_observer: {
+      host: '674629f5-2d5a-4a60-a833-125d9347564d.aws-us-east-1.tracing.edge.nr-data.net'
+    }
+  },
   attributes: {
     /**
      * Prefix of attributes to exclude from all destinations. Allows * as wildcard
