@@ -140,6 +140,11 @@ exports.delete = (req, res) => {
 
 // Delete all Tutorials from the database.
 exports.deleteAll = (req, res) => {
+  res.status(500).send({
+    message:
+      err.message || "Some error occurred while removing all tutorials."
+  });
+  return;
   Tutorial.deleteMany({})
     .then(data => {
       console.info(`${req.method} ${req.originalUrl}- ${JSON.stringify(req.params)} - Request Successful!!`);
