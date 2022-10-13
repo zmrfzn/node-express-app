@@ -1,4 +1,6 @@
 const db = require("../models");
+const logger = require("./../logger");
+
 const Tutorial = db.tutorials;
 
 // Create and Save a new Tutorial
@@ -20,12 +22,12 @@ exports.create = (req, res) => {
   tutorial
     .save(tutorial)
     .then(data => {
-      console.info(`${req.method} ${req.originalUrl}- ${JSON.stringify(req.params)} - Request Successful!!`);
+      logger.info(`${req.method} ${req.originalUrl}- ${JSON.stringify(req.params)} - Request Successful!!`);
 
       res.send(data);
     })
     .catch(err => {
-      console.error(`${req.method} ${req.originalUrl}- ${JSON.stringify(req.params)} - Error fetching data`);
+      logger.error(`${req.method} ${req.originalUrl}- ${JSON.stringify(req.params)} - Error fetching data`);
 
       res.status(500).send({
         message:
@@ -41,12 +43,12 @@ exports.findAll = (req, res) => {
 
   Tutorial.find(condition)
     .then(data => {
-    console.info(`${req.method} ${req.originalUrl} - Request Successful!!`);
+    logger.info(`${req.method} ${req.originalUrl} - Request Successful!!`);
 
       res.send(data);
     })
     .catch(err => {
-    console.error(`${req.method} ${req.originalUrl} - Error fetching data`);
+    logger.error(`${req.method} ${req.originalUrl} - Error fetching data`);
 
       res.status(500).send({
         message:
@@ -64,12 +66,12 @@ exports.findOne = (req, res) => {
       if (!data)
         res.status(404).send({ message: "Not found Tutorial with id " + id });
       else {
-        console.info(`${req.method} ${req.originalUrl}- ${JSON.stringify(req.params)} - Request Successful!!`);
+        logger.info(`${req.method} ${req.originalUrl}- ${JSON.stringify(req.params)} - Request Successful!!`);
         res.send(data);
       }
     })
     .catch(err => {
-    console.error(`${req.method} ${req.originalUrl}- ${JSON.stringify(req.params)} - Error fetching data`);
+    logger.error(`${req.method} ${req.originalUrl}- ${JSON.stringify(req.params)} - Error fetching data`);
       
       res
         .status(500)
@@ -90,18 +92,18 @@ exports.update = (req, res) => {
   Tutorial.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
     .then(data => {
       if (!data) {
-    console.error(`${req.method} ${req.originalUrl}- ${JSON.stringify(req.params)} - Error updating data`);
+    logger.error(`${req.method} ${req.originalUrl}- ${JSON.stringify(req.params)} - Error updating data`);
 
         res.status(404).send({
           message: `Cannot update Tutorial with id=${id}. Maybe Tutorial was not found!`
         });
       } else {
-        console.info(`${req.method} ${req.originalUrl}- ${JSON.stringify(req.params)} - Request Successful!!`);
+        logger.info(`${req.method} ${req.originalUrl}- ${JSON.stringify(req.params)} - Request Successful!!`);
         res.send({ message: "Tutorial was updated successfully." })
       };
     })
     .catch(err => {
-    console.error(`${req.method} ${req.originalUrl}- ${JSON.stringify(req.params)} - Error updating data`);
+    logger.error(`${req.method} ${req.originalUrl}- ${JSON.stringify(req.params)} - Error updating data`);
 
       res.status(500).send({
         message: "Error updating Tutorial with id=" + id
@@ -116,13 +118,13 @@ exports.delete = (req, res) => {
   Tutorial.findByIdAndRemove(id, { useFindAndModify: false })
     .then(data => {
       if (!data) {
-      console.error(`${req.method} ${req.originalUrl}- ${JSON.stringify(req.params)} - Error updating data`);
+      logger.error(`${req.method} ${req.originalUrl}- ${JSON.stringify(req.params)} - Error updating data`);
 
         res.status(404).send({
           message: `Cannot delete Tutorial with id=${id}. Maybe Tutorial was not found!`
         });
       } else {
-        console.info(`${req.method} ${req.originalUrl}- ${JSON.stringify(req.params)} - Request Successful!!`);
+        logger.info(`${req.method} ${req.originalUrl}- ${JSON.stringify(req.params)} - Request Successful!!`);
 
         res.send({
           message: "Tutorial was deleted successfully!"
@@ -130,7 +132,7 @@ exports.delete = (req, res) => {
       }
     })
     .catch(err => {
-    console.error(`${req.method} ${req.originalUrl}- ${JSON.stringify(req.params)} - Error updating data`);
+    logger.error(`${req.method} ${req.originalUrl}- ${JSON.stringify(req.params)} - Error updating data`);
 
       res.status(500).send({
         message: "Could not delete Tutorial with id=" + id
@@ -140,6 +142,9 @@ exports.delete = (req, res) => {
 
 // Delete all Tutorials from the database.
 exports.deleteAll = (req, res) => {
+  const err = new Error(`Failed to Delete the tutorials`)
+  logger.error(`${req.method} ${req.originalUrl}- ${JSON.stringify(req.params)} - ${err.message}`);
+
   res.status(500).send({
     message:
       err.message || "Some error occurred while removing all tutorials."
@@ -147,14 +152,14 @@ exports.deleteAll = (req, res) => {
   return;
   Tutorial.deleteMany({})
     .then(data => {
-      console.info(`${req.method} ${req.originalUrl}- ${JSON.stringify(req.params)} - Request Successful!!`);
+      logger.info(`${req.method} ${req.originalUrl}- ${JSON.stringify(req.params)} - Request Successful!!`);
       
       res.send({
         message: `${data.deletedCount} Tutorials were deleted successfully!`
       });
     })
     .catch(err => {
-      console.error(`${req.method} ${req.originalUrl}- ${JSON.stringify(req.params)} - Error updating data`);
+      logger.error(`${req.method} ${req.originalUrl}- ${JSON.stringify(req.params)} - Error updating data`);
 
       res.status(500).send({
         message:
