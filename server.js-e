@@ -1,4 +1,6 @@
 var newrelic = require('newrelic');
+const logger = require("./app/logger");
+
 const express = require("express");
 const cors = require("cors");
 
@@ -7,7 +9,6 @@ const app = express();
 var corsOptions = {
   origin: "*"
 };
-
 app.use(cors(corsOptions));
 
 // parse requests of content-type - application/json
@@ -29,10 +30,10 @@ db.mongoose
     useUnifiedTopology: true
   })
   .then(() => {
-    console.log("Connected to the database!");
+    logger.info("Connected to the database!");
   })
   .catch(err => {
-    console.log("Cannot connect to the database!", err);
+    logger.error("Cannot connect to the database!", err);
     process.exit();
   });
 
@@ -46,5 +47,5 @@ require("./app/routes/turorial.routes")(app);
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}.`);
+  logger.info(`Server is running on port ${PORT}.`);
 });
