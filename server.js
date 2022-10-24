@@ -43,9 +43,17 @@ app.get("/", (req, res) => {
 });
 
 require("./app/routes/turorial.routes")(app);
+const weather = require("./app/routes/weather.routes");
+app.use("/api/weather",weather);
+
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => {
-  logger.info(`Server is running on port ${PORT}.`);
-});
+try {
+  app.listen(PORT, () => {
+    logger.info(`Server is running on port ${PORT}.`);
+  });
+  
+} catch (error) {
+  console.error(error);
+}
