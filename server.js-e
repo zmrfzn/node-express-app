@@ -24,16 +24,13 @@ app.use(function(req, res, next) {
 });
 
 const db = require("./app/models");
-db.mongoose
-  .connect(db.url, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  })
+db.sequelize
+  .sync()
   .then(() => {
-    logger.info("Connected to the database!");
+    logger.info("Synced & Connected to the database!");
   })
-  .catch(err => {
-    logger.error("Cannot connect to the database!", err);
+  .catch((err) => {
+    logger.error("Cannot connect to the database!", err.message);
     process.exit();
   });
 
