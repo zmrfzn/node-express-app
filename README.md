@@ -1,4 +1,4 @@
-# Node.js Express & MongoDB: CRUD Rest APIs
+# Node.js Express & DB: CRUD Rest APIs
 
 
 ## Project setup
