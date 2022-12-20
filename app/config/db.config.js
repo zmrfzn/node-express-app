@@ -1,3 +1,13 @@
 module.exports = {
-  url: "mongodb+srv://su_mongodb:AJaix5uGSVThFQa1@cluster0.uk0xfro.mongodb.net/tutorials_db?retryWrites=true&w=majority"
+  HOST: "localhost",
+  USER: "postgres",
+  PASSWORD: "root",
+  DB: "DevRel",
+  dialect: "postgres",
+  pool: {
+    max: 5,
+    min: 0,
+    acquire: 30000,
+    idle: 10000
+  }
 };
