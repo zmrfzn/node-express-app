@@ -1,6 +1,6 @@
 module.exports = {
     apps : [{
-      name   : "server",
+      name   : "expressApp",
       script : "./server.js",
       out_file:"logs/app.log",
       error_file:"logs/error.log",
