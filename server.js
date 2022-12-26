@@ -1,4 +1,3 @@
-var newrelic = require('newrelic');
 const logger = require("./app/logger");
 
 const express = require("express");
@@ -17,11 +16,11 @@ app.use(express.json());
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
 
-//set custom headers
-app.use(function(req, res, next) {
-  res.setHeader("Access-Control-Allow-Headers", ["newrelic","traceparent","tracestate"]);
-  return next();
-});
+//set custom headers @deprecated
+// app.use(function(req, res, next) {
+//   res.setHeader("Access-Control-Allow-Headers", ["newrelic","traceparent","tracestate"]);
+//   return next();
+// });
 
 const db = require("./app/models");
 db.sequelize
