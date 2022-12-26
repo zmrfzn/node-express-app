@@ -9,7 +9,7 @@ exports.config = {
   /**
    * Array of application names.
    */
-  app_name: ['node-express-mongodb'],
+  app_name: ['node-express-app'],
   /**
    * Your New Relic license key.
    */
