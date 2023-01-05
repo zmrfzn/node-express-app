@@ -10,3 +10,8 @@ npm install
 ```
 node server.js
 ```
+
+### Run with OTEL
+```
+node --require './tracing.js' server.js
+```
