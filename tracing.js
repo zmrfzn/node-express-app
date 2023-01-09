@@ -32,7 +32,12 @@ const newRelicExporter = new OTLPTraceExporter({
 const sdk = new opentelemetry.NodeSDK({
   traceExporter: newRelicExporter,
   serviceName: "node-express-otel",
-  instrumentations: [getNodeAutoInstrumentations(), new PgInstrumentation({enabled:true})]
+  instrumentations: [getNodeAutoInstrumentations({
+    "@opentelemetry/instrumentation-pg" : {
+      requireParentSpan: true,
+      enhancedDatabaseReporting: true
+    }
+  }), new PgInstrumentation({enabled:true})]
 });
 
 sdk.start();
