@@ -1,0 +1,75 @@
+/**
+ * WARNING: This script will only work when
+ * local SSH key is authorized for the user/repo
+ */
+const path = require("path");
+const { execSync, exec } = require("child_process");
+const fs = require("fs"); // Or `import fs from "fs";` with ESM
+
+const repoName = "react-tutorials-crud";
+const repoLink = `git@github.com:zmrfzn/${repoName}.git`;
+
+const repoPath = `../tmp/${repoName}`;
+const repoBuildLocation = `${repoPath}/build`;
+
+const syscall = (command, stdOutLevel, cwd, execLog) => {
+  console.log(execLog);
+  execSync(command, {
+    stdio: stdOutLevel,
+    cwd: path.resolve(__dirname, cwd),
+  });
+};
+
+// Clone repo if not exists
+if (!fs.existsSync(repoPath)) {
+  syscall(
+    `git clone ${repoLink}`,
+    [0, 1, 2],
+    "../tmp/",
+    "Repo doesn't exist,  cloning fresh"
+  );
+} else {
+  console.log("Repo exists, proceeding without clone");
+}
+
+// Switch to required branch
+syscall(`git checkout otel`, [2], repoPath, "SWITCHING BRANCH to otel");
+
+// Run npm install
+syscall(
+  `npm install`,
+  [2],
+  repoPath,
+  `INSTALLING PACKAGES`
+);
+
+// Build react app
+syscall(
+  `npm run build-otel`,
+  [2],
+  `../tmp/${repoName}`,
+  `BUILDING APP..`
+);
+
+// Copy react build files to node app path
+syscall(
+  `cp -r ${repoBuildLocation} .`,
+  [0,1,2],
+  "",
+  `COPYING BUILD FILES.. from ${path.resolve(
+    __dirname,
+    `${repoBuildLocation}`
+  )}`
+);
+
+// clean up
+if (fs.existsSync(repoBuildLocation)) {
+
+  syscall(
+    `rm -rf ${repoBuildLocation}`,
+    [0, 1, 2],
+    "",
+    `CLEANING BUILD FILES..`
+  );
+}
+console.log(`COMPLETE!!`);
