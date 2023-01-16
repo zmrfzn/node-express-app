@@ -3,13 +3,15 @@
  * local SSH key is authorized for the user/repo
  */
 const path = require("path");
+const os = require("os")
+
 const { execSync, exec } = require("child_process");
 const fs = require("fs"); // Or `import fs from "fs";` with ESM
 
 const repoName = "react-tutorials-crud";
 const repoLink = `git@github.com:zmrfzn/${repoName}.git`;
 
-const repoPath = `../tmp/${repoName}`;
+const repoPath = path.join(os.tmpdir(),repoName);
 const repoBuildLocation = `${repoPath}/build`;
 
 const syscall = (command, stdOutLevel, cwd, execLog) => {
@@ -22,12 +24,12 @@ const syscall = (command, stdOutLevel, cwd, execLog) => {
 
 // Clone repo if not exists
 if (!fs.existsSync(repoPath)) {
-  if(!fs.existsSync(path.resolve(__dirname, '../tmp'))) fs.mkdirSync(path.resolve(__dirname, '../tmp'))
-  
+  // if(!fs.existsSync(path.resolve(__dirname, '../tmp'))) fs.mkdirSync(path.resolve(__dirname, '../tmp'))
+
   syscall(
     `git clone ${repoLink}`,
     [0, 1, 2],
-    "../tmp/",
+    os.tmpdir(),
     "Repo doesn't exist,  cloning fresh"
   );
 } else {
@@ -48,8 +50,8 @@ syscall(
 // Build react app
 syscall(
   `npm run build-otel`,
-  [2],
-  `../tmp/${repoName}`,
+  [0,2],
+  repoPath,
   `BUILDING APP..`
 );
 
