@@ -22,6 +22,8 @@ const syscall = (command, stdOutLevel, cwd, execLog) => {
 
 // Clone repo if not exists
 if (!fs.existsSync(repoPath)) {
+  if(!fs.existsSync(path.resolve(__dirname, '../tmp'))) fs.mkdirSync(path.resolve(__dirname, '../tmp'))
+  
   syscall(
     `git clone ${repoLink}`,
     [0, 1, 2],
