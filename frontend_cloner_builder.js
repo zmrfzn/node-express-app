@@ -22,6 +22,11 @@ const syscall = (command, stdOutLevel, cwd, execLog) => {
   });
 };
 
+// Switch to required branch
+const switchBranch = () => {
+  syscall(`git checkout otel`, [2], repoPath, "SWITCHING BRANCH to otel");
+}
+
 // Clone repo if not exists
 if (!fs.existsSync(repoPath)) {
   // if(!fs.existsSync(path.resolve(__dirname, '../tmp'))) fs.mkdirSync(path.resolve(__dirname, '../tmp'))
@@ -33,11 +38,13 @@ if (!fs.existsSync(repoPath)) {
     "Repo doesn't exist,  cloning fresh"
   );
 } else {
-  console.log("Repo exists, proceeding without clone");
+  switchBranch()
+  syscall(
+    `git pull`,
+    [0,1,2],
+    repoPath,
+    "Repo exists, pulling latest")
 }
-
-// Switch to required branch
-syscall(`git checkout otel`, [2], repoPath, "SWITCHING BRANCH to otel");
 
 // Run npm install
 syscall(
