@@ -15,6 +15,7 @@ exports.create = (req, res) => {
   const tutorial = {
     title: req.body.title,
     description: req.body.description,
+    category: req.body.category,
     published: req.body.published ? req.body.published : false,
   };
 
@@ -50,9 +51,10 @@ exports.findAll = (req, res) => {
     ? { title: { $regex: new RegExp(title), $options: "i" } }
     : {};
 
-  Tutorial.findAll({ where: condition })
+  Tutorial.findAll({ where: condition,order: [['updatedAt', 'DESC']]})
     .then((data) => {
       logger.info(`${req.method} ${req.originalUrl} - Request Successful!!`);
+      logger.info(`Fetched ${data.length} records from DB`);
 
       res.send(data);
     })
@@ -235,3 +237,24 @@ exports.findAllPublished = (req, res) => {
       });
     });
 };
+
+exports.getCategories = (req, res) => {
+  res.send(categories)
+}
+
+const categories = [{
+  "id": 1,
+  "category": "Frameworks"
+}, {
+  "id": 2,
+  "category": "DIY|How To"
+}, {
+  "id": 3,
+  "category": "Soft Skills"
+}, {
+  "id": 4,
+  "category": "Children"
+}, {
+  "id": 5,
+  "category": "Style"
+}, { "id" : 6, "category": "Random"}]
