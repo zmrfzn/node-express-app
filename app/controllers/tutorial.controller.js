@@ -22,11 +22,13 @@ exports.create = (req, res) => {
   // Save Tutorial in the database
   Tutorial.create(tutorial)
     .then((data) => {
+      logger.info(`Added ${data.length} records`);
       logger.info(
         `${req.method} ${req.originalUrl}- ${JSON.stringify(
           req.params
         )} - Request Successful!!`
       );
+
 
       res.send(data);
     })
@@ -53,8 +55,8 @@ exports.findAll = (req, res) => {
 
   Tutorial.findAll({ where: condition,order: [['updatedAt', 'DESC']]})
     .then((data) => {
+      logger.info(`${req.method} ${req.originalUrl} Fetched ${data.length} records`);
       logger.info(`${req.method} ${req.originalUrl} - Request Successful!!`);
-      logger.info(`Fetched ${data.length} records from DB`);
 
       res.send(data);
     })
@@ -74,14 +76,19 @@ exports.findOne = (req, res) => {
 
   Tutorial.findByPk(id)
     .then((data) => {
-      if (!data)
+      if (!data) {
+        logger.info(`${req.method} ${req.originalUrl} : Fetched ${data.length} records with ${id}`);
+
         res.status(404).send({ message: "Not found Tutorial with id " + id });
+      }
       else {
+        logger.info(`${req.method} ${req.originalUrl} : Fetched ${data.length} records with ${id}`);
         logger.info(
           `${req.method} ${req.originalUrl}- ${JSON.stringify(
             req.params
           )} - Request Successful!!`
         );
+
         res.send(data);
       }
     })
@@ -111,21 +118,23 @@ exports.update = (req, res) => {
   Tutorial.update(req.body, { where: { id: id } })
     .then((data) => {
       if (data != 1) {
+        logger.error(`${req.method}: Cannot update Tutorial with id=${id}. Maybe Tutorial was not found!`);
         logger.error(
           `${req.method} ${req.originalUrl}- ${JSON.stringify(
             req.params
           )} - Error updating data`
         );
-
         res.status(404).send({
           message: `Cannot update Tutorial with id=${id}. Maybe Tutorial was not found!`,
         });
       } else {
+        logger.info(`${req.method} ${req.originalUrl} : Updated ${data.length} records with ${id}`);
         logger.info(
           `${req.method} ${req.originalUrl}- ${JSON.stringify(
             req.params
           )} - Request Successful!!`
         );
+      
         res.send({ message: "Tutorial was updated successfully." });
       }
     })
@@ -135,6 +144,7 @@ exports.update = (req, res) => {
           req.params
         )} - Error updating data`
       );
+      logger.error(`${req.method} ${req.originalUrl} : Cannot update Tutorial with id=${id}. Maybe Tutorial was not found!`);
 
       res.status(500).send({
         message: "Error updating Tutorial with id=" + id,
@@ -154,11 +164,14 @@ exports.delete = (req, res) => {
             req.params
           )} - Error updating data`
         );
+        logger.error(`${req.method} ${req.originalUrl} : Cannot delete Tutorial with id=${id}. Maybe Tutorial was not found!`);
+
 
         res.status(404).send({
           message: `Cannot delete Tutorial with id=${id}. Maybe Tutorial was not found!`,
         });
       } else {
+        logger.info(`${req.method}: Deleted record with id=${id}`);
         logger.info(
           `${req.method} ${req.originalUrl}- ${JSON.stringify(
             req.params
@@ -176,6 +189,9 @@ exports.delete = (req, res) => {
           req.params
         )} - Error updating data`
       );
+      res.status(404).send({
+        message: `${req.method} ${req.originalUrl} : Cannot delete Tutorial with id=${id}. Maybe Tutorial was not found!`,
+      });
 
       res.status(500).send({
         message: "Could not delete Tutorial with id=" + id,
@@ -190,6 +206,9 @@ exports.deleteAll = (req, res) => {
     `${req.method} ${req.originalUrl}- ${JSON.stringify(req.params)} - ${
       err.message
     }`
+  );
+  logger.error(
+   `${req.method} ${req.originalUrl} : Bulk delete failed!`,
   );
 
   res.status(500).send({
@@ -228,6 +247,8 @@ exports.deleteAll = (req, res) => {
 exports.findAllPublished = (req, res) => {
   Tutorial.findAll({ where: { published: true } })
     .then((data) => {
+      logger.info(`${req.method}: Fetched ${data.length} records`);
+      logger.info(`${req.method} ${req.originalUrl} - Request Successful!!`);
       res.send(data);
     })
     .catch((err) => {
@@ -239,6 +260,8 @@ exports.findAllPublished = (req, res) => {
 };
 
 exports.getCategories = (req, res) => {
+  logger.info(`${req.method} ${req.originalUrl} - Request Successful!!`);
+  logger.info(`${req.method} ${req.originalUrl} : Fetched ${categories.length} records`);
   res.send(categories)
 }
 
