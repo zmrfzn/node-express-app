@@ -24,7 +24,7 @@ app.use(function (req, res, next) {
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept, traceparent"
   );
-
+  res.setHeader("Access-Control-Allow-Methods","*")
   let origin = req.get("origin");
   if (CORSwhitelist.indexOf(origin) >= 0) {
     res.header("Access-Control-Allow-Origin", origin);
