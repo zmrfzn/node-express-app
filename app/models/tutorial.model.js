@@ -12,8 +12,26 @@ module.exports = (sequelize, Sequelize) => {
     description: {
       type: Sequelize.STRING
     },
+    author: {
+      type: Sequelize.STRING,
+      allowNull: true
+    },
+    category: {
+      type: Sequelize.STRING,
+      allowNull: true
+    },
     published: {
       type: Sequelize.BOOLEAN
+    },
+    createdAt: {
+      type: Sequelize.DATE,
+      defaultValue: Sequelize.NOW,
+      allowNull: false
+    },
+    updatedAt: {
+      type: Sequelize.DATE,
+      defaultValue: Sequelize.NOW,
+      allowNull: false
     }
   });
 
