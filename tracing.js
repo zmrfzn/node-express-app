@@ -5,10 +5,10 @@ const { diag, DiagConsoleLogger, DiagLogLevel } = require('@opentelemetry/api');
 const api = require('@opentelemetry/api');
 
 const { PgInstrumentation } = require('@opentelemetry/instrumentation-pg');
-
-
 const { OTLPTraceExporter } = require("@opentelemetry/exporter-trace-otlp-proto");
-const { B3Propagator, B3InjectEncoding } = require('@opentelemetry/propagator-b3');
+const { envDetector, hostDetector, osDetector, processDetector } = require('@opentelemetry/resources')
+
+
 
 const {
   CompositePropagator,
@@ -40,9 +40,7 @@ const newRelicExporter = new OTLPTraceExporter({
 api.propagation.setGlobalPropagator(new CompositePropagator({
   propagators:[
     new W3CBaggagePropagator(),
-    new W3CTraceContextPropagator(),
-    // new B3Propagator(),
-    // new B3Propagator({ injectEncoding: B3InjectEncoding.MULTI_HEADER})
+    new W3CTraceContextPropagator()
   ]
 }))
 
@@ -53,8 +51,20 @@ const sdk = new opentelemetry.NodeSDK({
     "@opentelemetry/instrumentation-pg" : {
       requireParentSpan: true,
       enhancedDatabaseReporting: true
-    }
-  }), new PgInstrumentation({enabled:true})]
+    },
+    "@opentelemetry/instrumentation-http" : {
+      ignoreIncomingRequestHook(req) {
+        const isIgnoredRoute = !!req.url.match(/\/api\/traces/);
+        return isIgnoredRoute;
+      }
+    },
+    "@opentelemetry/instrumentation-express" : {
+      enabled: true
+    },
+    
+  })
+],
+  autoDetectResources: true
 });
 
 sdk.start();
