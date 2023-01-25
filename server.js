@@ -6,10 +6,8 @@ const path = require('path');
 
 const app = express();
 
-var corsOptions = {
-  origin: "*"
-};
-app.use(cors());
+const CORSwhitelist = ['http://localhost:8081', 'http://13.235.117.14'];
+
 
 // parse requests of content-type - application/json
 app.use(express.json());
@@ -19,11 +17,20 @@ app.use(express.urlencoded({ extended: true }));
 
 console.info(`log path => ${path.resolve(__dirname, '/../../build')}`)
 
-//set custom headers @deprecated
-// app.use(function(req, res, next) {
-//   res.setHeader("Access-Control-Allow-Headers", ["newrelic","traceparent","tracestate"]);
-//   return next();
-// });
+//set custom headers | CORS control
+app.use(function (req, res, next) {
+  res.setHeader("Access-Control-Allow-Credentials", true);
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, traceparent"
+  );
+
+  let origin = req.get("origin");
+  if (CORSwhitelist.indexOf(origin) >= 0) {
+    res.header("Access-Control-Allow-Origin", origin);
+  }
+  return next();
+});
 
 const db = require("./app/models");
 db.sequelize
@@ -45,13 +52,8 @@ app.get("/health", (req, res) => {
 require("./app/routes/turorial.routes")(app);
 const weather = require("./app/routes/weather.routes");
 app.use("/api/weather",weather);
-// const webAppRouter = require('./app/routes/web.routes'); 
-// app.use('/',webAppRouter)
-
-// app.use(express.static(path.join(__dirname, '/build')));
-// app.get("/*", (req, res) => {
-//   res.sendFile(path.join(__dirname, "/build", "index.html"));
-// });
+const otelRouter = require('./app/routes/otel.routes'); 
+app.use('/api/traces',otelRouter)
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;
