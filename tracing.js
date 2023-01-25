@@ -41,8 +41,8 @@ api.propagation.setGlobalPropagator(new CompositePropagator({
   propagators:[
     new W3CBaggagePropagator(),
     new W3CTraceContextPropagator(),
-    new B3Propagator(),
-    new B3Propagator({ injectEncoding: B3InjectEncoding.MULTI_HEADER})
+    // new B3Propagator(),
+    // new B3Propagator({ injectEncoding: B3InjectEncoding.MULTI_HEADER})
   ]
 }))
 
