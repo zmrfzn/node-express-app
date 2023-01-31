@@ -54,7 +54,7 @@ const sdk = new opentelemetry.NodeSDK({
     },
     "@opentelemetry/instrumentation-http" : {
       ignoreIncomingRequestHook(req) {
-        const isIgnoredRoute = !!req.url.match(/\/api\/traces/);
+        const isIgnoredRoute = !!req.url.match(/^(https?:\/\/)?([\da-z\.-]+)(\/[\d|\w]{2})(\/api\/traces)/);
         return isIgnoredRoute;
       }
     },
