@@ -1,4 +1,4 @@
-const db = require("../models");
+const db = require("../../database");
 const logger = require("./../logger");
 
 const Tutorial = db.tutorials;
