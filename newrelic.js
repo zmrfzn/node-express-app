@@ -9,11 +9,13 @@ exports.config = {
   /**
    * Array of application names.
    */
-  app_name: ['node-express-app'],
+  app_name: ['<YOUR APP NAME>'],
+  // app_name: ['node-express-app'],
   /**
    * Your New Relic license key.
    */
   license_key: '<INSERT YOUR NR LICENSE KEY>',
+  // license_key: '<INSERT YOUR NR LICENSE KEY>',
   logging: {
     /**
      * Level at which to log. 'trace' is most useful to New Relic when diagnosing
@@ -38,11 +40,6 @@ exports.config = {
   },
   distributed_tracing: {
     enabled: true
-  },
-  infinite_tracing: {
-    trace_observer: {
-      host: '674629f5-2d5a-4a60-a833-125d9347564d.aws-us-east-1.tracing.edge.nr-data.net'
-    }
   },
   attributes: {
     /**
