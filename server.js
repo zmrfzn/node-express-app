@@ -1,4 +1,3 @@
-var newrelic = require('newrelic');
 const logger = require("./app/logger");
 
 
@@ -18,11 +17,13 @@ app.use(express.json());
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
 
+/* Uncomment for setting up DT for frontend */
+
 //set custom headers
-app.use(function(req, res, next) {
-  res.setHeader("Access-Control-Allow-Headers", ["newrelic","traceparent","tracestate"]);
-  return next();
-});
+// app.use(function(req, res, next) {
+//   res.setHeader("Access-Control-Allow-Headers", ["newrelic","traceparent","tracestate"]);
+//   return next();
+// });
 
 const db = require("./database");
 db.sequelize
