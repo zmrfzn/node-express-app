@@ -58,6 +58,18 @@ exports.findAll = (req, res) => {
       logger.info(`${req.method} ${req.originalUrl} Fetched ${data.length} records`);
       logger.info(`${req.method} ${req.originalUrl} - Request Successful!!`);
 
+      let mappedData = data.map((d) => d.get({ plain: true }));
+
+      if(req.query.category) {
+       data = mappedData.map((f) => {
+          if (!!f.category) {
+            let id = f.category;
+            f.category = categories.find((c) => c.id == id)?.category;
+          }
+          return f;
+        });
+      }
+
       res.send(data);
     })
     .catch((err) => {

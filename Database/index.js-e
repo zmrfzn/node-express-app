@@ -1,6 +1,7 @@
-const dbConfig = require("./config.json")[`${process.env.NODE_ENV}`];
+const env = process.env.NODE_ENV || 'development'
+const dbConfig = require("./config.json")[`${env}`];
 
-console.log(`EMV: ${process.env.NODE_ENV}`);
+console.log(`ENV: ${process.env.NODE_ENV} || Fallback ENV: ${env}`);
 // const dbConfig = require("../config/db.config.js");
 
 const Sequelize = require("sequelize");
