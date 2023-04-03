@@ -6,7 +6,7 @@ name: Build and deploy Node.js app to Azure Web App - tutorialsexpress
 on:
   push:
     branches:
-      - mongo-backup
+      - Azure
   workflow_dispatch:
 
 jobs:
