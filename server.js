@@ -1,5 +1,6 @@
 var newrelic = require('newrelic');
 const logger = require("./app/logger");
+let appInsights = require('applicationinsights');
 
 const express = require("express");
 const cors = require("cors");
@@ -36,6 +37,10 @@ db.mongoose
     logger.error("Cannot connect to the database!", err);
     process.exit();
   });
+
+appInsights.setup("InstrumentationKey=4875a1a1-d538-4e9d-95d7-506fafa20853;IngestionEndpoint=https://eastus-8.in.applicationinsights.azure.com/;LiveEndpoint=https://eastus.livediagnostics.monitor.azure.com/")
+.setAutoCollectConsole(true, true)
+.start();
 
 // simple route
 app.get("/", (req, res) => {
