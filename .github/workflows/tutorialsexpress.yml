@@ -48,7 +48,7 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'tutorialsexpress'
+          app-name: 'tutorials-express'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_AD0C853DE09C4BBC8655C44FA04CC45D }}
           package: .
