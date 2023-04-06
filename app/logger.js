@@ -5,7 +5,7 @@ const logger = createLogger({
   level: "info",
   format: combine(
     timestamp(),
-    prettyPrint()
+    format.json(),
   ),
   //logger method...
   transports: [
