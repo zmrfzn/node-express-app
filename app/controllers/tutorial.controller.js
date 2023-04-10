@@ -22,13 +22,20 @@ exports.create = (req, res) => {
   tutorial
     .save(tutorial)
     .then(data => {
-      logger.info(`${req.method} ${req.originalUrl}- ${JSON.stringify(req.params)} - Request Successful!!`);
-
+      logger.info(`Added ${data.length} records`);
+      logger.info(
+        `${req.method} ${req.originalUrl}- ${JSON.stringify(
+          req.params
+        )} - Request Successful!!`
+      );
       res.send(data);
     })
     .catch(err => {
-      logger.error(`${req.method} ${req.originalUrl}- ${JSON.stringify(req.params)} - Error fetching data`);
-
+      logger.error(
+        `${req.method} ${req.originalUrl}- ${JSON.stringify(
+          req.params
+        )} - Error fetching data`
+      );
       res.status(500).send({
         message:
           err.message || "Some error occurred while creating the Tutorial."
@@ -43,7 +50,8 @@ exports.findAll = (req, res) => {
 
   Tutorial.find(condition)
     .then(data => {
-    logger.info(`${req.method} ${req.originalUrl} - Request Successful!!`);
+      logger.info(`${req.method} ${req.originalUrl} Fetched ${data.length} records`);
+      logger.info(`${req.method} ${req.originalUrl} - Request Successful!!`);
 
       res.send(data);
     })
@@ -66,7 +74,13 @@ exports.findOne = (req, res) => {
       if (!data)
         res.status(404).send({ message: "Not found Tutorial with id " + id });
       else {
-        logger.info(`${req.method} ${req.originalUrl}- ${JSON.stringify(req.params)} - Request Successful!!`);
+        logger.info(`${req.method} ${req.originalUrl} : Fetched ${data.length} records with ${id}`);
+        logger.info(
+          `${req.method} ${req.originalUrl}- ${JSON.stringify(
+            req.params
+          )} - Request Successful!!`
+        );
+
         res.send(data);
       }
     })
@@ -92,18 +106,33 @@ exports.update = (req, res) => {
   Tutorial.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
     .then(data => {
       if (!data) {
-    logger.error(`${req.method} ${req.originalUrl}- ${JSON.stringify(req.params)} - Error updating data`);
-
+        logger.error(`${req.method}: Cannot update Tutorial with id=${id}. Maybe Tutorial was not found!`);
+        logger.error(
+          `${req.method} ${req.originalUrl}- ${JSON.stringify(
+            req.params
+          )} - Error updating data`
+        );
         res.status(404).send({
           message: `Cannot update Tutorial with id=${id}. Maybe Tutorial was not found!`
         });
       } else {
-        logger.info(`${req.method} ${req.originalUrl}- ${JSON.stringify(req.params)} - Request Successful!!`);
+        logger.info(`${req.method} ${req.originalUrl} : Updated ${data.length} records with ${id}`);
+        logger.info(
+          `${req.method} ${req.originalUrl}- ${JSON.stringify(
+            req.params
+          )} - Request Successful!!`
+        );
+      
         res.send({ message: "Tutorial was updated successfully." })
       };
     })
     .catch(err => {
-    logger.error(`${req.method} ${req.originalUrl}- ${JSON.stringify(req.params)} - Error updating data`);
+      logger.error(
+        `${req.method} ${req.originalUrl}- ${JSON.stringify(
+          req.params
+        )} - Error updating data`
+      );
+      logger.error(`${req.method} ${req.originalUrl} : Cannot update Tutorial with id=${id}. Maybe Tutorial was not found!`);
 
       res.status(500).send({
         message: "Error updating Tutorial with id=" + id
@@ -118,14 +147,24 @@ exports.delete = (req, res) => {
   Tutorial.findByIdAndRemove(id, { useFindAndModify: false })
     .then(data => {
       if (!data) {
-      logger.error(`${req.method} ${req.originalUrl}- ${JSON.stringify(req.params)} - Error updating data`);
+        logger.error(
+          `${req.method} ${req.originalUrl}- ${JSON.stringify(
+            req.params
+          )} - Error updating data`
+        );
+        logger.error(`${req.method} ${req.originalUrl} : Cannot delete Tutorial with id=${id}. Maybe Tutorial was not found!`);
+
 
         res.status(404).send({
           message: `Cannot delete Tutorial with id=${id}. Maybe Tutorial was not found!`
         });
       } else {
-        logger.info(`${req.method} ${req.originalUrl}- ${JSON.stringify(req.params)} - Request Successful!!`);
-
+        logger.info(`${req.method}: Deleted record with id=${id}`);
+        logger.info(
+          `${req.method} ${req.originalUrl}- ${JSON.stringify(
+            req.params
+          )} - Request Successful!!`
+        );
         res.send({
           message: "Tutorial was deleted successfully!"
         });
@@ -145,6 +184,9 @@ exports.deleteAll = (req, res) => {
   const err = new Error(`Failed to Delete the tutorials`)
   logger.error(`${req.method} ${req.originalUrl}- ${JSON.stringify(req.params)} - ${err.message}`);
 
+  logger.error(
+    `${req.method} ${req.originalUrl} : Bulk delete failed!`,
+   );
   res.status(500).send({
     message:
       err.message || "Some error occurred while removing all tutorials."
@@ -172,6 +214,8 @@ exports.deleteAll = (req, res) => {
 exports.findAllPublished = (req, res) => {
   Tutorial.find({ published: true })
     .then(data => {
+      logger.info(`${req.method}: Fetched ${data.length} records`);
+      logger.info(`${req.method} ${req.originalUrl} - Request Successful!!`);
       res.send(data);
     })
     .catch(err => {
@@ -181,3 +225,26 @@ exports.findAllPublished = (req, res) => {
       });
     });
 };
+
+exports.getCategories = (req, res) => {
+  logger.info(`${req.method} ${req.originalUrl} - Request Successful!!`);
+  logger.info(`${req.method} ${req.originalUrl} : Fetched ${categories.length} records`);
+  res.send(categories)
+}
+
+const categories = [{
+  "id": 1,
+  "category": "Frameworks"
+}, {
+  "id": 2,
+  "category": "DIY|How To"
+}, {
+  "id": 3,
+  "category": "Soft Skills"
+}, {
+  "id": 4,
+  "category": "Children"
+}, {
+  "id": 5,
+  "category": "Style"
+}, { "id" : 6, "category": "Random"}]
