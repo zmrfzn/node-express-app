@@ -43,8 +43,8 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: node-app
-      - name: unzip artifact for deployment
-        run: unzip release.zip
+      # - name: unzip artifact for deployment
+      #   run: unzip release.zip
       # - name: npm install
       #   run: |
       #     npm install
@@ -56,4 +56,4 @@ jobs:
           app-name: 'tutorials-express'
           slot-name: 'production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_707A9DE9102E4057A11F036B7524FBCB }}
-          package: .
+          package: release.zip
