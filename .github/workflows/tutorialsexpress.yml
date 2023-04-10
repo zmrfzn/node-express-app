@@ -56,4 +56,4 @@ jobs:
           app-name: 'tutorials-express'
           slot-name: 'production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_707A9DE9102E4057A11F036B7524FBCB }}
-          package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+          package: .
