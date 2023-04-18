@@ -1,5 +1,6 @@
 const logger = require("./app/logger");
 
+
 const express = require("express");
 const cors = require("cors");
 const path = require('path');
@@ -32,7 +33,7 @@ app.use(function (req, res, next) {
   return next();
 });
 
-const db = require("./app/models");
+const db = require("./database");
 db.sequelize
   .sync()
   .then(() => {
