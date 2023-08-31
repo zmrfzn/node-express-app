@@ -34,7 +34,7 @@ exports.config = {
       /**
        * Toggles whether the agent gathers log records for sending to New Relic.
        */
-      enabled: true
+      enabled: false
     }
   },
   distributed_tracing: {
